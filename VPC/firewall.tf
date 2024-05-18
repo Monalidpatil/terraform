@@ -1,6 +1,6 @@
 resource "google_compute_firewall" "rules" {
   name        = "my-firewall-rule-2"
-  network     = var.vpc_link
+  network     = "default"
   description = "Creates firewall rule targeting tagged instances"
 
   allow {
