@@ -11,6 +11,17 @@ resource "google_compute_instance" "vm" {
   allow_stopping_for_update = true
   tags                      = ["web"]
 
+
+  user_data = <<-EOF
+      #!/bin/sh
+      sudo apt-get update
+      sudo apt install -y apache2
+      sudo systemctl status apache2
+      sudo systemctl start apache2
+      sudo chown -R $USER:$USER /var/www/html
+      sudo echo "<html><body><h1>Hello this is module-1 at instance id `curl http://169.254.169.254/latest/meta-data/instance-id` </h1></body></html>" > /var/www/html/index.html
+      EOF
+
   boot_disk {
     initialize_params {
       image = "debian-cloud/debian-11"
@@ -23,6 +34,6 @@ resource "google_compute_instance" "vm" {
       // Ephemeral public IP
     }
   }
-  metadata_startup_script = file("install_space-invaders.sh")
-
+  #   metadata_startup_script = file("install_space-invaders.sh")
 }
+
